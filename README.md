@@ -1,43 +1,35 @@
-# 使用 SSR 搭建自己的国内中转 MTP 代理
+# 使用SSR搭建自己的国内中转MTP代理
 
-> July April 12, 2019
+> 七夏 April 12, 2019
 
 本文参考自《[使用v2ray搭建自己的墙内中转mtp代理](https://telegra.ph/%E4%BD%BF%E7%94%A8v2ray%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%A2%99%E5%86%85%E4%B8%AD%E8%BD%ACmtp%E4%BB%A3%E7%90%86-03-21)》   
 > 好像是这个月初，电报圈里面的童鞋都发现自己的MTP代理都不好使了！大家经过了一番讨论后，怀疑是一种神秘的东方力量让普通的MTP连不上了。
 > 
 > 挺久之前，我在x-air的频道上面看到了他们写的v2ray转换MTP的配置文件，但是用的人不多。现在封锁变得越来越严，是时候普及一下墙内中转MTP了。
 
-本文主要介绍使用 SSR 搭建自己的国内中转 MTP 代理的方法   
-   
-> 相关文章推荐
->   
-> SS 中转教程: [简单实现MTP中转
-](https://telegra.ph/%E7%AE%80%E5%8D%95%E5%AE%9E%E7%8E%B0MTP%E4%B8%AD%E8%BD%AC-05-18)
->   
-> V2ray 中转教程: [使用v2ray搭建自己的墙内中转mtp代理](https://telegra.ph/%E4%BD%BF%E7%94%A8v2ray%E6%90%AD%E5%BB%BA%E8%87%AA%E5%B7%B1%E7%9A%84%E5%A2%99%E5%86%85%E4%B8%AD%E8%BD%ACmtp%E4%BB%A3%E7%90%86-03-21)
-   
-##### 一、服务器选购   
+本文主要介绍使用SSR搭建自己的国内中转MTP代理的方法   
+
+## 一、服务器选购   
 
 首先要一台国内的服务器，参考文章里面推荐的是阿里云学生机，这里推荐一下其他几家比较划算的国内NAT机商家的机器，带宽也比较大，加载图片之类的会更快一些   
 
-###### 第一家：[OLVPS](https://t667.com/aff.php?aff=261&gid=1)    
+### 第一家：[OLVPS](https://t667.com/aff.php?aff=261&gid=1)    
 
-兔子家的，推荐买江苏镇江的NAT机，25元那款最划算，如果遇到没货随时会补货，订购链接：[Zhenjiang Kvm Nat 256](https://t667.com/aff.php?aff=261&a=add&pid=57)，可以去[梨园论坛](https://bbs.liyuans.com/)看看有没有人卖，最近看见有不少人出   
+兔子家的，推荐买江苏镇江的NAT机，25元那款最划算，不过现在没货，不过随时会补货，订购链接：[Zhenjiang Kvm Nat 256](https://t667.com/aff.php?aff=261&a=add&pid=57)，可以去[梨园论坛](https://bbs.liyuans.com/)看看有没有人卖，最近看见有不少人出   
 如果有货的话江苏的 _Jiangsu Kvm Nat 256_ 那款也行   
 
-###### 第二家：[昱格云](https://www.ygeidc.com/aff.php?aff=55&gid=11)   
+### 第二家：[昱格云](https://www.ygeidc.com/aff.php?aff=55&gid=9)   
 
-老咸鱼家的，推荐买绍兴柯桥双线，也是25元那款（~现货~），订购链接：[SXNat-Bronze](https://www.ygeidc.com/aff.php?aff=55&a=add&pid=24)   
-~然后他家的江苏高防BGP也不错，就是最近出墙有点问题，商家正在解决，可以的话BGP那款对联通用户更友好一点，也是25元（现货，而且可以使用循环5折优惠码 <font color="red">_JSNat-50_</font> 折后只要14.99元一个月），订购链接：[JSNat-Bronze](https://www.ygeidc.com/aff.php?aff=55&a=add&pid=35)~（该套餐已下架，商家目前正在准备把江苏的迁移到绍兴，另外正在筹备上新区域的服务器）   
+老咸鱼家的，推荐买绍兴柯桥双线，也是25元那款（现货），订购链接：[SXNat-Bronze](https://www.ygeidc.com/aff.php?aff=55&a=add&pid=24)   
+然后他家的江苏高防BGP也不错，就是最近出墙有点问题，商家正在解决，可以的话BGP那款对联通用户更友好一点，也是25元（现货，而且可以使用循环5折优惠码 <font color="red">_JSNat-50_</font> 折后只要14.99元一个月），订购链接：[JSNat-Bronze](https://www.ygeidc.com/aff.php?aff=55&a=add&pid=35)   
 
 另外如果需要不限流量的可以看看 [PQS](https://www.pqs.pw/aff.php?aff=31&gid=15) 这家新上的深圳电信家宽，出墙应该更快   
-更便宜的还有 CanBesystems(cbvps) 家的河南BGP，不过我没用过，订购链接：[河南BGP](http://www.cbvps.net/cart.php?gid=14)   
 
 然后需要一台国外搭建了SSR的服务器，可以自己购买服务器搭建，国外服务器选购我就不推荐了，太杂乱了，搭建方式可以用~~逗比~~（怀念逗比大佬）的脚本，教程：[ssrmu.sh](https://doubibackup.com/z2a4lk3l-2.html) ，不过建议选择购买各大机场的SSR服务，更划算一点，机场选购可以参考一个telegram评测频道，链接： [Professional-V1 Blog](https://t.me/V1_BLOG)   
 
-##### 二、服务搭建   
+## 二、服务搭建   
 
-###### 1.安装SSR客户端   
+### 1.安装SSR客户端   
 
 首先安装git等常用工具，使用XShell或其他ssh终端登陆上你的服务器，建议先用 `sudo su` 命令切换到root用户方便接下来的操作，然后输入下面的代码：   
 ```bash
@@ -66,7 +58,7 @@ remote: Total 5490 (delta 0), reused 0 (delta 0), pack-reused 5490
 Receiving objects: 100% (5490/5490), 1.71 MiB | 410.00 KiB/s, done.
 Resolving deltas: 100% (3799/3799), done.
 ```
-紧接着就可以配置SSR客户端啦，使用 `ssr config` 来修改配置文件，然后使用 `ssr start` 启动SSR，配置文件路径 `~/.local/share/shadowsocksr/config.json`    
+紧接着就可以配置SSR客户端啦，使用 `ssr config` 来修改配置文件，然后使用 `ssr start` 启动SSR，配置文件路径 `/usr/local/share/shadowsocksr/config.json`    
 > <font color="red">**注意**</font>: 如果不会使用vim，建议先把下面的命令全部复制到你本地的文本编辑器里面，替换掉上面的配置信息（SSR服务器的IP端口和密码等），然后将全部内容复制到剪切板一起执行   
 
 ```bash
@@ -93,7 +85,7 @@ echo '{
     "connect_verbose_info": 0,
     "redirect": "",
     "fast_open": false
-}' > ~/.local/share/shadowsocksr/config.json
+}' > /usr/local/share/shadowsocksr/config.json
 ```
 > Tips:    
 > 启动 `ssr start`   
@@ -101,7 +93,7 @@ echo '{
 > 卸载 `ssr uninstall`（这里操作会删除/usr/local/share/shadowsocksr）   
 > 帮助及更多命令 `ssr help`   
 
-###### 2.V2Ray/MTP搭建   
+### 2.V2Ray/MTP搭建   
 
 本教程使用的是V2Ray自带的MTProto模块搭建MTP   
 下载 <https://github.com/v2ray/v2ray-core/releases/download/v4.18.0/v2ray-linux-64.zip> 然后解压，把里面的 v2ray v2ctl 两个文件上传到服务器里面，或者在服务器里面执行代码：   
@@ -226,14 +218,7 @@ ip6tables -I INPUT -m state --state NEW -m tcp -p tcp --dport 3389 -j ACCEPT
 iptables-save > /etc/iptables.up.rules
 ip6tables-save > /etc/ip6tables.up.rules
 ```
-到此，就可以在你的设备上连接MTP测试啦  
-然后每次开机运行如下命令即可：   
-```bash
-ssr start
-cd /root/mtp
-nohup ./v2ray >> /dev/null 2>&1 &
-```   
-
+到此，就可以在你的设备上连接MTP测试啦   
 > 另外，使用NAT服务器设置端口映射可以参考《[使用NAT VPS服务并联机](http://www.cbvps.net/index.php/knowledgebase/1/NAT-VPS.html) 》   
 
 <font color="red">**注意**</font>：写教程好累的，所以本文上述服务器购买链接都有我的AFF，如果真的很介意的话，下面是所有不带AFF的链接qwq   
@@ -243,4 +228,34 @@ nohup ./v2ray >> /dev/null 2>&1 &
 > SXNat-Bronze: <https://www.ygeidc.com/cart.php?a=add&pid=24>   
 > JSNat-Bronze: <https://www.ygeidc.com/cart.php?a=add&pid=35> 循环5折优惠码 <font color="red">_JSNat-50_</font>    
 > PQS: <https://www.pqs.pw/cart.php?gid=15>   
-> cbvps: <http://www.cbvps.net/cart.php?gid=14>   
+
+# 使用 glider 建立隧道中转 MTP
+
+关于 [glider](https://github.com/nadoo/glider)
+
+```shell
+wget --no-check-certificate https://github.com/nadoo/glider/releases/download/v0.9.2/glider_0.9.2_linux_amd64.tar.gz
+tar -xvf glider*.tar.gz && rm -f glider*.tar.gz
+mv glider*/glider /usr/local/bin/
+nohup glider -verbose -listen tcptun://:8080=sgp.example.com:23333 -forward "ssr://chacha20-ietf:ssrpassword@hk.ssrserver.com:543?protocol=auth_aes128_md5&protocol_param=&obfs=plain&obfs_param=" >> /tmp/glider.log 2>&1 &
+```
+
+可以自己在 https://github.com/nadoo/glider/releases 页面下载最新的 glider 文件
+
+8080 为本地监听端口
+
+sgp.example.com 为要转发到的远程服务器 IP 或域名（MTP 服务的 IP 或域名）
+
+23333 为要转发到的远程服务器端口（MTP 服务的端口）
+
+chacha20-ietf 为 ssr 的加密方式
+
+ssrpassword 为 ssr 的密码
+
+hk.ssrserver.com 为 ssr 服务的 IP 或域名
+
+543 为 ssr 服务的端口
+
+auth_aes128_md5 为 ssr 服务的协议
+
+plain 为 ssr 服务的混淆方式
