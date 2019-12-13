@@ -259,3 +259,27 @@ hk.ssrserver.com 为 ssr 服务的 IP 或域名
 auth_aes128_md5 为 ssr 服务的协议
 
 plain 为 ssr 服务的混淆方式
+
+# 限制 MTP 仅部分地区 IP 可用
+
+## 中国白名单脚本
+
+仅限中国地区访问，可选择端口，不影响 SSH
+
+脚本来源：https://github.com/lrinQVQ/script/tree/master/other
+
+使用方法
+
+```shell
+wget --no-check-certificate https://raw.githubusercontent.com/whunt1/MTPtoSSR/master/china_only && chmod +x china_only && ./china_only
+```
+
+注明:
+
+1.装了宝塔的用户暂时不要使用
+
+2.bug 提交请在 Github/Telegram 联系作者 @lrinQVQ
+
+## 屏蔽指定国家脚本
+
+参见：[Linux VPS一键屏蔽指定国家所有的IP访问](https://www.moerats.com/archives/585/)
